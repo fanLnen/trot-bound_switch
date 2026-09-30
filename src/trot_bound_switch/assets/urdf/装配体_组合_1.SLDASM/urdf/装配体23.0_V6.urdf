@@ -1,0 +1,661 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="装配体_组合_1.SLDASM">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.000373 -0.002177 0.056332" rpy="0 0 0" />
+      <mass value="6.203" />
+      <inertia ixx="0.030396939" ixy="0.000622119" ixz="-0.002407119" iyy="0.105166937" iyz="0.000397518" izz="0.109407258" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision name="base_rear_wide_collision">
+      <origin xyz="-0.182938000 0.001115500 0.053126000" rpy="0 0 0" />
+      <geometry>
+        <box size="0.078500000 0.241709000 0.135918000" />
+      </geometry>
+    </collision>
+    <collision name="base_middle_collision">
+      <origin xyz="-0.009688000 0.001091000 0.053126000" rpy="0 0 0" />
+      <geometry>
+        <box size="0.268000000 0.129950000 0.135918000" />
+      </geometry>
+    </collision>
+    <collision name="base_front_wide_collision">
+      <origin xyz="0.163562000 0.001115500 0.053126000" rpy="0 0 0" />
+      <geometry>
+        <box size="0.078500000 0.241709000 0.135918000" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="FL_hip_Link">
+    <inertial>
+      <origin xyz="-0.070164 0.008198 -9.2e-05" rpy="0 0 0" />
+      <mass value="0.605" />
+      <inertia ixx="0.0003611" ixy="0.000107309" ixz="-1.883e-06" iyy="0.000613319" iyz="-1.396e-06" izz="0.000664927" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FL_hip_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="FL_hip_joint" type="revolute">
+    <origin xyz="0.24731 0.064616 0.031167" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="FL_hip_Link" />
+    <axis xyz="1 0 0" />
+    <limit lower="-0.5" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="FL_thigh_Link">
+    <inertial>
+      <origin xyz="0.009604 -0.056807 -0.01349" rpy="0 0 0" />
+      <mass value="1.423" />
+      <inertia ixx="0.004751082" ixy="-0.000773135" ixz="0.000994736" iyy="0.003123184" iyz="0.001121707" izz="0.003674247" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FL_thigh_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+    <collision name="FL_thigh_Link_motor1_collision">
+      <origin xyz="0 -0.105900005 1.2665987e-07" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324998908" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="FL_thigh_Link_motor2_collision">
+      <origin xyz="-1.00582838e-07 -0.044199999 1.08592212e-06" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324988943" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="FL_thigh_Link_link_single_collision">
+      <origin xyz="0.02602381593 0.0001499997678 -0.03764450788" rpy="-2.53510017 2.22044605e-16 -1.57079633" />
+      <geometry>
+        <box size="0.018 0.036 0.155" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FL_thigh_joint" type="revolute">
+    <origin xyz="0 0.1093 0" rpy="0 0 0" />
+    <parent link="FL_hip_Link" />
+    <child link="FL_thigh_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1" effort="48" velocity="20" />
+  </joint>
+  <link name="FL_calf_Link">
+    <inertial>
+      <origin xyz="-0.039326 -0.023201 -0.045508" rpy="0 0 0" />
+      <mass value="0.809" />
+      <inertia ixx="0.000958558" ixy="0.000165253" ixz="-0.000281843" iyy="0.001185804" iyz="2.305e-06" izz="0.001254234" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FL_calf_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.86667 0.9098 1 1" />
+      </material>
+    </visual>
+    <collision name="FL_calf_Link_motor_collision">
+      <origin xyz="-0.032937938 -0.0385900005 -0.0462878919" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324938207" length="0.05" />
+      </geometry>
+    </collision>
+    <collision name="FL_calf_Link_link_single_collision">
+      <origin xyz="-0.03286602166 0.002500443538 -0.04584069788" rpy="-1.571496061 0.5706028583 3.132862571" />
+      <geometry>
+        <box size="0.12 0.034 0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FL_calf_joint" type="revolute">
+    <origin xyz="0.06082 0.00069 -0.1261" rpy="0 0 0" />
+    <parent link="FL_thigh_Link" />
+    <child link="FL_calf_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1.25" effort="48" velocity="20" />
+  </joint>
+  <link name="FL_ankle_Link">
+    <inertial>
+      <origin xyz="0.026655 -0.000125 -0.045479" rpy="0 0 0" />
+      <mass value="0.066" />
+      <inertia ixx="0.000112821" ixy="4e-08" ixz="5.7135e-05" iyy="0.000147056" iyz="-7.9e-08" izz="3.7603e-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FL_ankle_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision name="FL_ankle_Link_ankle_collision">
+      <origin xyz="0.0236879984 -0.0001501999175 -0.03836747699" rpy="-3.14158972 0.492066396 -3.14158096" />
+      <geometry>
+        <cylinder radius="0.0155" length="0.097" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FL_ankle_joint" type="revolute">
+    <origin xyz="-0.11048 0.00496 -0.085985" rpy="0 0 0" />
+    <parent link="FL_calf_Link" />
+    <child link="FL_ankle_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.75" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="FL_foot_Link">
+    <inertial>
+      <origin xyz="0.0029 0 -0.006549" rpy="0 0 0" />
+      <mass value="0.026" />
+      <inertia ixx="3.41e-06" ixy="0" ixz="-1.79e-07" iyy="4.285e-06" iyz="0" izz="3.633e-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FL_foot_joint" type="fixed">
+    <origin xyz="0.0660737803593308 -0.000149999999997985 -0.1169213887327" rpy="0 0 0" />
+    <parent link="FL_ankle_Link" />
+    <child link="FL_foot_Link" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="FR_hip_Link">
+    <inertial>
+      <origin xyz="-0.070164 -0.008216 -3.5e-05" rpy="0 0 0" />
+      <mass value="0.605" />
+      <inertia ixx="0.000361174" ixy="-0.000107639" ixz="-8.07e-07" iyy="0.000614558" iyz="-3.01e-07" izz="0.000663762" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FR_hip_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="FR_hip_joint" type="revolute">
+    <origin xyz="0.24731 -0.062384 0.031167" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="FR_hip_Link" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-0.5" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="FR_thigh_Link">
+    <inertial>
+      <origin xyz="0.009604 0.056807 -0.01349" rpy="0 0 0" />
+      <mass value="1.423" />
+      <inertia ixx="0.004751086" ixy="0.000772904" ixz="0.000994738" iyy="0.003123188" iyz="-0.001121676" izz="0.003674248" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FR_thigh_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+    <collision name="FR_thigh_Link_motor1_collision">
+      <origin xyz="-1.00582838e-07 0.105900005 1.08592212e-06" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324988943" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="FR_thigh_Link_motor2_collision">
+      <origin xyz="0 0.044199999 1.2665987e-07" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324998908" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="FR_thigh_Link_link_single_collision">
+      <origin xyz="0.02602381593 -0.0001499997678 -0.03764450788" rpy="2.53510017 2.22044605e-16 1.57079633" />
+      <geometry>
+        <box size="0.018 0.036 0.155" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FR_thigh_joint" type="revolute">
+    <origin xyz="0 -0.1093 0" rpy="0 0 0" />
+    <parent link="FR_hip_Link" />
+    <child link="FR_thigh_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1" effort="48" velocity="20" />
+  </joint>
+  <link name="FR_calf_Link">
+    <inertial>
+      <origin xyz="-0.039371 0.023201 -0.04546" rpy="0 0 0" />
+      <mass value="0.809" />
+      <inertia ixx="0.000958707" ixy="-0.000163658" ixz="-0.000282128" iyy="0.001185275" iyz="-3.994e-06" izz="0.001253556" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FR_calf_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.86667 0.9098 1 1" />
+      </material>
+    </visual>
+    <collision name="FR_calf_Link_motor_collision">
+      <origin xyz="-0.0329317974 0.0385900005 -0.0462911804" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324999613" length="0.05" />
+      </geometry>
+    </collision>
+    <collision name="FR_calf_Link_link_single_collision">
+      <origin xyz="-0.03283240103 -0.002502648551 -0.04589674936" rpy="1.580173657 0.5710567115 -3.131859258" />
+      <geometry>
+        <box size="0.12 0.034 0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FR_calf_joint" type="revolute">
+    <origin xyz="0.06082 -0.00069 -0.1261" rpy="0 0 0" />
+    <parent link="FR_thigh_Link" />
+    <child link="FR_calf_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1.25" effort="48" velocity="20" />
+  </joint>
+  <link name="FR_ankle_Link">
+    <inertial>
+      <origin xyz="0.026654 0.000125 -0.045479" rpy="0 0 0" />
+      <mass value="0.066" />
+      <inertia ixx="0.00011282" ixy="-4e-08" ixz="5.7134e-05" iyy="0.000147055" iyz="7.9e-08" izz="3.7603e-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/FR_ankle_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision name="FR_ankle_Link_ankle_collision">
+      <origin xyz="0.02368763439 0.0001499988169 -0.03836762113" rpy="-3.14159265 0.4920714 -3.14159265" />
+      <geometry>
+        <cylinder radius="0.0155" length="0.097" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FR_ankle_joint" type="revolute">
+    <origin xyz="-0.11048 -0.00496 -0.085985" rpy="0 0 0" />
+    <parent link="FR_calf_Link" />
+    <child link="FR_ankle_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.75" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="FR_foot_Link">
+    <inertial>
+      <origin xyz="0.0029 0 -0.006549" rpy="0 0 0" />
+      <mass value="0.026" />
+      <inertia ixx="3.41e-06" ixy="0" ixz="-1.79e-07" iyy="4.285e-06" iyz="0" izz="3.633e-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FR_foot_joint" type="fixed">
+    <origin xyz="0.0660737803593315 0.000150000000010503 -0.116921388732699" rpy="0 0 0" />
+    <parent link="FR_ankle_Link" />
+    <child link="FR_foot_Link" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="RL_hip_Link">
+    <inertial>
+      <origin xyz="0.070164 0.007913 0.000199" rpy="0 0 0" />
+      <mass value="0.605" />
+      <inertia ixx="0.000359885" ixy="-0.000101281" ixz="-4.227e-06" iyy="0.000612514" iyz="-2.005e-06" izz="0.000664518" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RL_hip_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="RL_hip_joint" type="revolute">
+    <origin xyz="-0.26669 0.064616 0.031167" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="RL_hip_Link" />
+    <axis xyz="1 0 0" />
+    <limit lower="-0.5" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="RL_thigh_Link">
+    <inertial>
+      <origin xyz="0.009604 -0.056807 -0.01349" rpy="0 0 0" />
+      <mass value="1.423" />
+      <inertia ixx="0.004751082" ixy="-0.000773135" ixz="0.000994736" iyy="0.003123184" iyz="0.001121707" izz="0.003674247" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RL_thigh_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+    <collision name="RL_thigh_Link_motor1_collision">
+      <origin xyz="0 -0.105900005 1.2665987e-07" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324998908" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="RL_thigh_Link_motor2_collision">
+      <origin xyz="-1.00582838e-07 -0.044199999 1.08592212e-06" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324988943" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="RL_thigh_Link_link_single_collision">
+      <origin xyz="0.02602381593 0.0001499997678 -0.03764450788" rpy="-2.53510017 2.22044605e-16 -1.57079633" />
+      <geometry>
+        <box size="0.018 0.036 0.155" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RL_thigh_joint" type="revolute">
+    <origin xyz="0 0.1093 0" rpy="0 0 0" />
+    <parent link="RL_hip_Link" />
+    <child link="RL_thigh_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1" effort="48" velocity="20" />
+  </joint>
+  <link name="RL_calf_Link">
+    <inertial>
+      <origin xyz="-0.039326 -0.023201 -0.045508" rpy="0 0 0" />
+      <mass value="0.809" />
+      <inertia ixx="0.000958558" ixy="0.000165253" ixz="-0.000281843" iyy="0.001185804" iyz="2.305e-06" izz="0.001254234" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RL_calf_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.86667 0.9098 1 1" />
+      </material>
+    </visual>
+    <collision name="RL_calf_Link_motor_collision">
+      <origin xyz="-0.032937938 -0.0385900005 -0.0462878919" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324938207" length="0.05" />
+      </geometry>
+    </collision>
+    <collision name="RL_calf_Link_link_single_collision">
+      <origin xyz="-0.03286602166 0.002500443538 -0.04584069788" rpy="-1.571496061 0.5706028583 3.132862571" />
+      <geometry>
+        <box size="0.12 0.034 0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RL_calf_joint" type="revolute">
+    <origin xyz="0.06082 0.00069 -0.1261" rpy="0 0 0" />
+    <parent link="RL_thigh_Link" />
+    <child link="RL_calf_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1.25" effort="48" velocity="20" />
+  </joint>
+  <link name="RL_ankle_Link">
+    <inertial>
+      <origin xyz="0.026655 -0.000125 -0.045479" rpy="0 0 0" />
+      <mass value="0.066" />
+      <inertia ixx="0.000112821" ixy="4e-08" ixz="5.7135e-05" iyy="0.000147056" iyz="-7.9e-08" izz="3.7603e-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RL_ankle_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision name="RL_ankle_Link_ankle_collision">
+      <origin xyz="0.0236879984 -0.0001501999175 -0.03836747699" rpy="-3.14158972 0.492066396 -3.14158096" />
+      <geometry>
+        <cylinder radius="0.0155" length="0.097" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RL_ankle_joint" type="revolute">
+    <origin xyz="-0.11048 0.00496 -0.085985" rpy="0 0 0" />
+    <parent link="RL_calf_Link" />
+    <child link="RL_ankle_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.75" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="RL_foot_Link">
+    <inertial>
+      <origin xyz="0.0029 0 -0.006549" rpy="0 0 0" />
+      <mass value="0.026" />
+      <inertia ixx="3.41e-06" ixy="0" ixz="-1.79e-07" iyy="4.285e-06" iyz="0" izz="3.633e-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RL_foot_joint" type="fixed">
+    <origin xyz="0.066074 -0.00015 -0.11692" rpy="0 0 0" />
+    <parent link="RL_ankle_Link" />
+    <child link="RL_foot_Link" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="RR_hip_Link">
+    <inertial>
+      <origin xyz="0.070164 -0.007989 -0.000217" rpy="0 0 0" />
+      <mass value="0.605" />
+      <inertia ixx="0.000360214" ixy="0.000102929" ixz="4.601e-06" iyy="0.000611559" iyz="-1.348e-06" izz="0.000665802" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_hip_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="RR_hip_joint" type="revolute">
+    <origin xyz="-0.26669 -0.062384 0.031167" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="RR_hip_Link" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-0.5" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="RR_thigh_Link">
+    <inertial>
+      <origin xyz="0.009604 0.056807 -0.01349" rpy="0 0 0" />
+      <mass value="1.423" />
+      <inertia ixx="0.004751086" ixy="0.000772904" ixz="0.000994738" iyy="0.003123188" iyz="-0.001121676" izz="0.003674248" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_thigh_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+    <collision name="RR_thigh_Link_motor1_collision">
+      <origin xyz="-1.00582838e-07 0.105900005 1.08592212e-06" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324988943" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="RR_thigh_Link_motor2_collision">
+      <origin xyz="0 0.044199999 1.2665987e-07" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324998908" length="0.0565" />
+      </geometry>
+    </collision>
+    <collision name="RR_thigh_Link_link_single_collision">
+      <origin xyz="0.02602381593 -0.0001499997678 -0.03764450788" rpy="2.53510017 0 1.57079633" />
+      <geometry>
+        <box size="0.018 0.036 0.155" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RR_thigh_joint" type="revolute">
+    <origin xyz="0 -0.1093 0" rpy="0 0 0" />
+    <parent link="RR_hip_Link" />
+    <child link="RR_thigh_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1" effort="48" velocity="20" />
+  </joint>
+  <link name="RR_calf_Link">
+    <inertial>
+      <origin xyz="-0.039371 0.023201 -0.04546" rpy="0 0 0" />
+      <mass value="0.809" />
+      <inertia ixx="0.000958707" ixy="-0.000163658" ixz="-0.000282128" iyy="0.001185275" iyz="-3.994e-06" izz="0.001253556" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_calf_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+    <collision name="RR_calf_Link_motor_collision">
+      <origin xyz="-0.0329317974 0.0385900005 -0.0462911804" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.0324999613" length="0.05" />
+      </geometry>
+    </collision>
+    <collision name="RR_calf_Link_link_single_collision">
+      <origin xyz="-0.03283240103 -0.002502648551 -0.04589674936" rpy="1.580173657 0.5710567115 -3.131859258" />
+      <geometry>
+        <box size="0.12 0.034 0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RR_calf_joint" type="revolute">
+    <origin xyz="0.06082 -0.00069 -0.1261" rpy="0 0 0" />
+    <parent link="RR_thigh_Link" />
+    <child link="RR_calf_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.5" upper="1.25" effort="48" velocity="20" />
+  </joint>
+  <link name="RR_ankle_Link">
+    <inertial>
+      <origin xyz="0.026654 0.000125 -0.045479" rpy="0 0 0" />
+      <mass value="0.066" />
+      <inertia ixx="0.00011282" ixy="-4e-08" ixz="5.7134e-05" iyy="0.000147055" iyz="7.9e-08" izz="3.7603e-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_ankle_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision name="RR_ankle_Link_ankle_collision">
+      <origin xyz="0.02368763439 0.0001499988169 -0.03836762113" rpy="-3.14159265 0.4920714 -3.14159265" />
+      <geometry>
+        <cylinder radius="0.0155" length="0.097" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RR_ankle_joint" type="revolute">
+    <origin xyz="-0.11048 -0.00496 -0.085985" rpy="0 0 0" />
+    <parent link="RR_calf_Link" />
+    <child link="RR_ankle_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.75" upper="0.5" effort="48" velocity="20" />
+  </joint>
+  <link name="RR_foot_Link">
+    <inertial>
+      <origin xyz="0.0029 0 -0.006549" rpy="0 0 0" />
+      <mass value="0.026" />
+      <inertia ixx="3.41e-06" ixy="0" ixz="-1.79e-07" iyy="4.285e-06" iyz="0" izz="3.633e-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 3.141592654" />
+      <geometry>
+        <mesh filename="package://装配体_组合_1.SLDASM/meshes/RR_FOOT_LINK_GB.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RR_foot_joint" type="fixed">
+    <origin xyz="0.066074 0.00015 -0.11692" rpy="0 0 0" />
+    <parent link="RR_ankle_Link" />
+    <child link="RR_foot_Link" />
+    <axis xyz="0 0 0" />
+  </joint>
+</robot>
