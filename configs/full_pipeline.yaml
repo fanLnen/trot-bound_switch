@@ -1,0 +1,71 @@
+# Machine-readable record of the public code-only training recipe.
+seed: 42
+
+experts:
+  bound:
+    task: SA-16DOF-FuXian-Bound-Expert-v0
+    num_envs: 4096
+    iterations: 1351
+    expected_checkpoint: model_1350.pt
+    command:
+      vx: [0.1, 3.5]
+      vy: [0.0, 0.0]
+      wz: [0.0, 0.0]
+  trot:
+    task: SA-16DOF-FuXian-Trot-Expert-v0
+    num_envs: 4096
+    iterations: 2101
+    expected_checkpoint: model_2100.pt
+    recipe: final_turning_task_trained_directly_from_random_initialization
+    command:
+      vx: [0.1, 3.5]
+      vy: [0.0, 0.0]
+      max_abs_wz: 0.8
+
+dataset:
+  environments_per_gait: 512
+  frames_per_gait: 2000000
+  chunk_frames: 100000
+  frame_dimension: 85
+  sequence_length: 3
+
+representation:
+  validation_fraction: 0.10
+  tvae:
+    epochs: 30
+    batch_size: 500
+    learning_rate: 0.001
+    beta_kl: 0.1
+    latent_dimension: 16
+    d_model: 64
+    attention_heads: 8
+    transformer_layers: 2
+    feedforward_dimension: 64
+  action_decoders:
+    epochs: 20
+    batch_size: 500
+    learning_rate: 0.001
+    hidden_dimension: 64
+    input_dimension: 16
+    output_dimension: 16
+
+transition:
+  task: SA-16DOF-FuXian-Trot-Bound-Transition-v0
+  num_envs: 4096
+  iterations: 1351
+  expected_checkpoint: model_1300.pt
+  observation_dimension: 62
+  action_dimension: 16
+  latent_clamp: [-3.0, 3.0]
+  decoder_action_scale: 0.25
+  gait_dwell_seconds: [3.0, 6.0]
+  transition_window_seconds: 0.6
+  rewards:
+    linear_velocity_tracking: 1.5
+    angular_velocity_tracking: 0.5
+    latent_action_smoothness: -0.01
+    joint_torque: -1.0e-7
+    joint_acceleration: -3.0e-7
+    termination: -1.5
+    transition_pitch: -0.5
+    transition_pitch_rate: -0.02

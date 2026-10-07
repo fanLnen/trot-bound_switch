@@ -12,6 +12,8 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--task", default="SA-16DOF-FuXian-Trot-Bound-Transition-v0")
 parser.add_argument("--checkpoint", type=Path, required=True)
+parser.add_argument("--trot_decoder", type=Path, default=None)
+parser.add_argument("--bound_decoder", type=Path, default=None)
 parser.add_argument("--output-dir", type=Path, required=True)
 parser.add_argument("--num_envs", type=int, default=512)
 parser.add_argument("--num_steps", type=int, default=1000)
@@ -114,11 +116,23 @@ def main() -> None:
     output_dir = args.output_dir.expanduser().resolve()
     if not checkpoint.is_file():
         raise FileNotFoundError(checkpoint)
+    if (args.trot_decoder is None) != (args.bound_decoder is None):
+        raise ValueError("--trot_decoder and --bound_decoder must be supplied together")
+    trot_decoder = args.trot_decoder.expanduser().resolve() if args.trot_decoder else None
+    bound_decoder = args.bound_decoder.expanduser().resolve() if args.bound_decoder else None
     output_dir.mkdir(parents=True, exist_ok=True)
-    assert_package_business_dependencies(checkpoint)
+    assert_package_business_dependencies(
+        checkpoint,
+        trot_decoder=trot_decoder,
+        bound_decoder=bound_decoder,
+        allow_external_models=trot_decoder is not None,
+    )
     if args.task != TASK_ID:
         raise ValueError(f"This repository evaluator only supports {TASK_ID}, got {args.task}")
     env_cfg = TransitionEnvCfg()
+    if trot_decoder is not None and bound_decoder is not None:
+        env_cfg.actions.joint_pos.trot_decoder_checkpoint = str(trot_decoder)
+        env_cfg.actions.joint_pos.bound_decoder_checkpoint = str(bound_decoder)
     agent_cfg = TransitionPPORunnerCfg()
     env_cfg.scene.num_envs = args.num_envs
     env_cfg.seed = args.seed

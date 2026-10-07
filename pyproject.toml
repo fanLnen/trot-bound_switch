@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trot-bound-switch"
-version = "0.1.0"
-description = "SA16 forced Trot/Bound transition task for IsaacLab"
+version = "0.2.0"
+description = "Full SA16 Trot/Bound expert, representation, and transition training pipeline for IsaacLab"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 license = {text = "BSD-3-Clause"}

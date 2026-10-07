@@ -1,11 +1,12 @@
 # SA16 Trot-Bound Switch
 
-Forced Trot/Bound seamless-transition locomotion for the SA16 robot. The PPO
-policy outputs a 16D latent action. A forced gait scheduler selects one of two
-frozen motion-prior decoders, and the decoded 16D joint action is applied as
-`q_des = q_default + 0.25 * decoded_action` with `Kp=40`, `Kd=1`.
+SA16 locomotion code and artifacts for the complete path from gait experts to
+forced Trot/Bound seamless-transition control.
 
-Tested in the documented IsaacLab/Isaac Sim environment.
+The final PPO policy outputs a 16D latent action. A forced gait scheduler
+selects one of two frozen motion-prior decoders, and the decoded 16D joint
+action is applied as `q_des = q_default + 0.25 * decoded_action` with `Kp=40`
+and `Kd=1`.
 
 ## Environment
 
@@ -16,63 +17,117 @@ Tested in the documented IsaacLab/Isaac Sim environment.
 - rsl-rl-lib: 5.0.1
 - PyTorch: 2.7.0+cu128
 
-The repository uses an existing IsaacLab installation. Set `ISAACLAB_ROOT` if
-IsaacLab is not in a sibling directory named `Isaaclab`.
+Tested in the documented IsaacLab/Isaac Sim environment. This package installs
+beside an existing IsaacLab checkout and does not modify IsaacLab source files.
+Set `ISAACLAB_ROOT` when IsaacLab is not in a sibling directory named
+`Isaaclab`.
 
-Setup installs this package in editable mode with `--no-deps` and
-`--no-build-isolation`; it does not download another IsaacLab installation.
-
-## Setup and playback
+## Setup
 
 ```bash
+git clone https://github.com/fanLnen/trot-bound_switch.git
+cd trot-bound_switch
 ./scripts/setup.sh
+./scripts/validate_pipeline.sh
+```
+
+Setup uses the existing IsaacLab Python environment with `--no-deps` and
+`--no-build-isolation`; it does not download another IsaacLab installation.
+
+## Play the pretrained result
+
+```bash
 ./scripts/play_pretrained.sh
 ```
 
-`play_pretrained.sh` loads the repository-owned `model_1300.pt`, Trot decoder,
-Bound decoder, URDF, and meshes. Runtime provenance prints the resolved paths.
+This loads the repository-owned `model_1300.pt`, Trot decoder, Bound decoder,
+URDF, and meshes. Runtime provenance prints every resolved path.
 
-## Fresh transition PPO training
+## Train the complete pipeline
 
 ```bash
-./scripts/train_from_scratch.sh
+./scripts/train_full_pipeline.sh
 ```
 
-This initializes only the transition PPO actor and critic from scratch. The
-Trot and Bound action decoders remain frozen. The formal configuration uses:
+This code-only pipeline performs five stages:
 
-- 4096 environments and 1351 iterations
+1. Fresh 16D joint-action Bound expert PPO: 4096 environments, 1351 iterations.
+2. Fresh 16D joint-action Trot expert PPO: 4096 environments, 2101 iterations.
+3. Expert rollout collection: 512 environments and 2,000,000 frames per gait.
+4. Shared state TVAE plus separate Trot and Bound action decoders.
+5. Fresh forced-transition latent PPO: 4096 environments, 1351 iterations.
+
+Generated checkpoints and datasets are written under
+`artifacts/full_pipeline/` and are ignored by Git. The two raw datasets require
+roughly 2.2 GB, with additional space required for checkpoints and intermediate
+representation files. Set `ARTIFACT_ROOT` to use another location.
+
+Individual stages can also be run with:
+
+```bash
+./scripts/train_bound_expert.sh
+./scripts/train_trot_expert.sh
+./scripts/collect_expert_datasets.sh
+./scripts/train_representation.sh
+./scripts/train_transition_from_pipeline.sh
+```
+
+For backward compatibility, `scripts/train_from_scratch.sh` remains the older
+transition-PPO-only entry point and uses the packaged frozen decoders. Use
+`train_full_pipeline.sh` for the expert-to-transition workflow.
+
+The complete recipe, stage contracts, expected outputs, and the historical
+Trot-training limitation are documented in
+[`docs/FULL_PIPELINE.md`](docs/FULL_PIPELINE.md). Exact numeric settings are in
+[`configs/full_pipeline.yaml`](configs/full_pipeline.yaml).
+
+Packaging this code did not rerun the multi-day full pipeline. Static checks do
+not constitute a claim that every newly trained seed will numerically match the
+packaged policy.
+
+## Play or evaluate a newly trained pipeline
+
+```bash
+./scripts/play_pipeline.sh
+./scripts/evaluate_pipeline.sh
+```
+
+Both commands default to the generated `model_1300.pt` and generated Trot/Bound
+decoders. An explicit transition checkpoint can be passed as the first
+argument.
+
+The packaged reference policy can be evaluated independently:
+
+```bash
+./scripts/evaluate.sh src/trot_bound_switch/pretrained/policy/model_1300.pt
+```
+
+Add `--video` to either evaluation command to record a rollout with transition
+telemetry.
+
+## Transition configuration
+
 - 62D policy observation and 16D latent action
 - approximately 50/50 initial Trot/Bound assignment
 - independent forced-gait dwell times sampled uniformly from 3 to 6 seconds
 - latent clamp `[-3, 3]`
 - transition window of 0.6 seconds
 - velocity recovery at XY error below 0.25 m/s for 10 consecutive control steps
+- no latent-action symmetry augmentation
 
-The reward weights are `+1.5` linear velocity tracking, `+0.5` angular
-velocity tracking, `-0.01` latent smoothness, `-1e-7` joint torque, `-3e-7`
-joint acceleration, `-1.5` termination, `-0.5` transition pitch, and `-0.02`
+Reward weights are `+1.5` linear velocity tracking, `+0.5` angular velocity
+tracking, `-0.01` latent smoothness, `-1e-7` joint torque, `-3e-7` joint
+acceleration, `-1.5` termination, `-0.5` transition pitch, and `-0.02`
 transition pitch rate.
 
-## Evaluation
-
-```bash
-./scripts/evaluate.sh src/trot_bound_switch/pretrained/policy/model_1300.pt
-```
-
-Evaluation writes its JSON report under `outputs/evaluation/`. Add `--video`
-to record a rollout with transition telemetry.
-
-## Integrity and provenance
-
-Verify all packaged binary artifacts with:
+## Integrity
 
 ```bash
 sha256sum --check checksums.sha256
 ./scripts/smoke_test.sh
 ```
 
-The package owns the SA16 task, robot config, URDF/meshes, decoders, and policy.
-The runtime scripts print every resolved model and asset path for provenance.
-The implementation was tested in the documented IsaacLab/Isaac Sim environment;
-it has not been claimed as a clean vanilla IsaacLab checkout validation.
+The package owns the SA16 robot config, URDF/meshes, expert tasks and rewards,
+expert symmetry and curriculum, data collector, representation training code,
+transition task, frozen reference decoders, and reference final policy. It does
+not import the old custom SA16 task modules from a local IsaacLab source tree.

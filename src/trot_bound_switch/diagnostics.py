@@ -7,7 +7,11 @@ from pathlib import Path
 from trot_bound_switch import paths
 
 
-def provenance(checkpoint: str | Path) -> dict[str, Path]:
+def provenance(
+    checkpoint: str | Path,
+    trot_decoder: str | Path | None = None,
+    bound_decoder: str | Path | None = None,
+) -> dict[str, Path]:
     from trot_bound_switch.assets import robot
     from trot_bound_switch.tasks import transition_env_cfg
 
@@ -15,8 +19,8 @@ def provenance(checkpoint: str | Path) -> dict[str, Path]:
         "transition task module": Path(inspect.getfile(transition_env_cfg)).resolve(),
         "robot config module": Path(inspect.getfile(robot)).resolve(),
         "URDF": paths.URDF_PATH,
-        "Trot decoder": paths.TROT_DECODER_PATH,
-        "Bound decoder": paths.BOUND_DECODER_PATH,
+        "Trot decoder": Path(trot_decoder).expanduser().resolve() if trot_decoder else paths.TROT_DECODER_PATH,
+        "Bound decoder": Path(bound_decoder).expanduser().resolve() if bound_decoder else paths.BOUND_DECODER_PATH,
         "policy checkpoint": Path(checkpoint).expanduser().resolve(),
     }
     for name, value in resolved.items():
@@ -24,16 +28,24 @@ def provenance(checkpoint: str | Path) -> dict[str, Path]:
     return resolved
 
 
-def assert_package_business_dependencies(checkpoint: str | Path) -> None:
-    resolved = provenance(checkpoint)
+def assert_package_business_dependencies(
+    checkpoint: str | Path,
+    trot_decoder: str | Path | None = None,
+    bound_decoder: str | Path | None = None,
+    allow_external_models: bool = False,
+) -> None:
+    resolved = provenance(checkpoint, trot_decoder=trot_decoder, bound_decoder=bound_decoder)
     repository_root = paths.PACKAGE_ROOT.parents[1]
     for name, value in resolved.items():
+        if not value.exists():
+            raise FileNotFoundError(value)
+        is_model = name in {"Trot decoder", "Bound decoder", "policy checkpoint"}
+        if allow_external_models and is_model:
+            continue
         try:
             value.relative_to(repository_root)
         except ValueError as error:
             raise RuntimeError(f"{name} is outside the new repository: {value}") from error
-        if not value.exists():
-            raise FileNotFoundError(value)
 
     legacy = {
         name: getattr(module, "__file__", None)

@@ -15,6 +15,9 @@ parser.add_argument("--num_envs", type=int, default=4096)
 parser.add_argument("--max_iterations", type=int, default=1351)
 parser.add_argument("--seed", type=int, default=42)
 parser.add_argument("--run_name", default="forced_transition_formal_4096x1351_reproduction")
+parser.add_argument("--trot_decoder", type=Path, default=None)
+parser.add_argument("--bound_decoder", type=Path, default=None)
+parser.add_argument("--output_dir", type=Path, default=None)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 simulation_app = AppLauncher(args).app
@@ -55,9 +58,21 @@ def _install_runner_init_trace() -> None:
 
 def main() -> None:
     repo_root = Path(__file__).resolve().parents[2]
-    assert_package_business_dependencies(PRETRAINED_POLICY_PATH)
+    if (args.trot_decoder is None) != (args.bound_decoder is None):
+        raise ValueError("--trot_decoder and --bound_decoder must be supplied together")
+    trot_decoder = args.trot_decoder.expanduser().resolve() if args.trot_decoder else None
+    bound_decoder = args.bound_decoder.expanduser().resolve() if args.bound_decoder else None
+    assert_package_business_dependencies(
+        PRETRAINED_POLICY_PATH,
+        trot_decoder=trot_decoder,
+        bound_decoder=bound_decoder,
+        allow_external_models=trot_decoder is not None,
+    )
 
     env_cfg = TransitionEnvCfg()
+    if trot_decoder is not None and bound_decoder is not None:
+        env_cfg.actions.joint_pos.trot_decoder_checkpoint = str(trot_decoder)
+        env_cfg.actions.joint_pos.bound_decoder_checkpoint = str(bound_decoder)
     env_cfg.scene.num_envs = args.num_envs
     env_cfg.seed = args.seed
     if args.device is not None:
@@ -76,8 +91,11 @@ def main() -> None:
     if agent_cfg.resume:
         raise RuntimeError("train.py is fresh-only and must never resume a checkpoint")
 
-    stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    log_dir = repo_root / "logs" / "rsl_rl" / agent_cfg.experiment_name / f"{stamp}_{args.run_name}"
+    if args.output_dir is None:
+        stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        log_dir = repo_root / "logs" / "rsl_rl" / agent_cfg.experiment_name / f"{stamp}_{args.run_name}"
+    else:
+        log_dir = args.output_dir.expanduser().resolve()
     log_dir.mkdir(parents=True, exist_ok=False)
     print(f"[INFO] Fresh training logs: {log_dir}")
 
